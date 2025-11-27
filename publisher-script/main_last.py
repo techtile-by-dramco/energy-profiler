@@ -82,7 +82,7 @@ def read_data():
     if len(length_byte) == 0:
         return None
 
-    length = length_byte[0]  # bij jou = 14
+    length = length_byte[0] -1 # bij jou = 14
 
     print(length)
 
