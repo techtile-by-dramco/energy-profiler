@@ -38,7 +38,7 @@ context = zmq.Context()
 socket = context.socket(zmq.PUB)
 socket.bind("tcp://*:5556")  # Bind to local address and port
 
-ser = serial.Serial('COM4', 460800, timeout=1)  # Change 'COM1' to your serial port
+ser = serial.Serial('/dev/ttyUSB1', 460800, timeout=1)  # Change 'COM1' to your serial port
 
 # readings = (0,0,0)
 readings_queue = queue.Queue()
