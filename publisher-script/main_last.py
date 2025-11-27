@@ -50,20 +50,61 @@ latest_data = None  # Store the most recent reading
 # --------------------------
 # Function to read a single measurement
 # --------------------------
-def read_data():
-    global ser
-    # Wait for header b'\x02\x0E'
-    while True:
-        header = ser.read(2)
-        if header == b'\x02\x0E':
-            break
+# def read_data():
+#     global ser
+#     # Wait for header b'\x02\x0E'
+#     while True:
+#         header = ser.read(2)
+#         if header == b'\x02\x0E':
+#             break
 
-    # Read 12 bytes (3 x uint32)
-    raw_data = ser.read(12)
-    if len(raw_data) != 12:
+#     # Read 12 bytes (3 x uint32)
+#     raw_data = ser.read(12)
+#     if len(raw_data) != 12:
+#         return None
+
+#     values = struct.unpack('>LLL', raw_data)  # big-endian uint32
+#     return values
+def xor_checksum(data: bytes) -> int:
+    """Calculate XOR checksum over all bytes."""
+    c = 0
+    for b in data:
+        c ^= b
+    return c
+
+def read_data():
+    # Zoek startbyte 0x02
+    while ser.read(1) != b'\x02':
+        pass
+
+    # Lees lengtebyte
+    length_byte = ser.read(1)
+    if len(length_byte) == 0:
         return None
 
-    values = struct.unpack('>LLL', raw_data)  # big-endian uint32
+    length = length_byte[0]  # bij jou = 14
+
+    # Lees payload + checksum
+    frame = ser.read(length)
+    if len(frame) != length:
+        return None
+
+    # frame bevat nu:
+    #   [0..11] payload  (3× uint32)
+    #   [12]   checksum
+
+    payload = frame[:-1]
+    recv_checksum = frame[-1]
+
+    # Bereken checksum over: startbyte + lengthbyte + payload
+    calc_checksum = xor_checksum(b'\x02' + length_byte + payload)
+
+    if calc_checksum != recv_checksum:
+        print(f"Checksum mismatch! recv={recv_checksum} calc={calc_checksum}")
+        return None
+
+    # Decodeer big-endian uint32 ×3
+    values = struct.unpack(">LLL", payload)
     return values
 
 # --------------------------
