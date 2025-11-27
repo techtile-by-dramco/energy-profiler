@@ -84,8 +84,6 @@ def read_data():
 
     length = length_byte[0] -1 # bij jou = 14
 
-    print(length)
-
     # Lees payload + checksum
     frame = ser.read(length)
     if len(frame) != length:
