@@ -28,88 +28,63 @@ import zmq
 import json
 import time
 
-# Create a ZeroMQ context
+# --------------------------
+# Setup ZeroMQ
+# --------------------------
 context = zmq.Context()
-
-# Create a ZeroMQ PUSH socket
 socket = context.socket(zmq.PUB)
-socket.bind("tcp://0.0.0.0:5556")  # Bind to local address and port
+socket.bind("tcp://0.0.0.0:5556")
 
-raw_data = None
-
-
-ser = serial.Serial('/dev/ttyUSB1', 460800, timeout=1)  # Change 'COM1' to your serial port
-
+# --------------------------
+# Setup Serial
+# --------------------------
+ser = serial.Serial('/dev/ttyUSB1', 460800, timeout=1)
 print(ser)
 
+# --------------------------
+# Variables
+# --------------------------
+last_send_time = time.time()
+latest_data = None  # Store the most recent reading
+
+# --------------------------
+# Function to read a single measurement
+# --------------------------
 def read_data():
+    global ser
+    # Wait for header b'\x02\x0E'
+    while True:
+        header = ser.read(2)
+        if header == b'\x02\x0E':
+            break
 
-  while(ser.in_waiting > 0):
-    # Check if header is correct
-
-    # val = ser.read(2)
-    while(ser.read(2) != b'\x02\x0E'):
-      # val = ser.read(2)
-      # print(val)
-      None
-
-    # while(ser.read(1) != b'\x02'):
-    # #   val = ser.read(2)
-    # #   print(val)
-    #   None
-    
-    # print("Serial header received successfully.")
-
-    # Read 12 bytes (3x uint32_t)
+    # Read 12 bytes (3 x uint32)
     raw_data = ser.read(12)
+    if len(raw_data) != 12:
+        return None
 
-    # Unpack data into three uint32_t values (big-endian format)
-    values = struct.unpack('>LLL', raw_data)  # Assuming big-endian format
-    # values = struct.unpack('<LLL', raw_data)  # Change to little-endian format
-
-    # Print received values
-    print("Received values:", values)
-
+    values = struct.unpack('>LLL', raw_data)  # big-endian uint32
     return values
 
-counter = 0
-prev_time = 0
+# --------------------------
+# Main loop
+# --------------------------
+while True:
+    # Read as fast as possible
+    readings = read_data()
+    if readings is not None:
+        timestamp = round(time.time_ns() / 1e6)  # timestamp in ms
+        latest_data = {
+            "timestamp": timestamp,
+            "buffer_voltage_mv": readings[0],
+            "resistance": readings[1],
+            "pwr_nw": readings[2]
+        }
 
-new_data = [0,0,0,0]
+    # Only transmit every 1 second
+    if latest_data and (time.time() - last_send_time) >= 1.0:
+        socket.send_string(json.dumps(latest_data))
+        print(f"{latest_data['timestamp']} - {latest_data['buffer_voltage_mv']} - "
+              f"{latest_data['resistance']} - {latest_data['pwr_nw']}")
+        last_send_time = time.time()
 
-while 1:
-  readings = read_data()
-  if readings != None:
-
-    new_data = [round(time.time_ns()/1e6)] + list(readings)
-    # print(new_data)
-
-    #  Create dict
-    data = dict(
-      timestamp = new_data[0],
-      buffer_voltage_mv = new_data[1],
-      resistance = new_data[2],
-      pwr_nw = new_data[3],
-      )
-    
-    # Debug script
-    # print(data)
-    
-    #   Send JSON data over the socket
-    socket.send_string(json.dumps(data))
-
-    counter = counter + 1
-
-    # if (time.time() - prev_time) > 1:
-    #   prev_time = time.time()
-      
-    #   print(f"{counter} messages send per second")
-
-    print(f"{data['timestamp']} - {data['buffer_voltage_mv']} - {data['resistance']} - {data['pwr_nw']}")
-
-    #   counter = 0
-    
-
-# Close the socket and ZeroMQ context
-socket.close()
-context.term()
