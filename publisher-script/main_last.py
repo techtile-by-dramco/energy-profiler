@@ -104,7 +104,7 @@ def read_data():
         return None
 
     # Decodeer big-endian uint32 ×3
-    values = struct.unpack(">LLL", payload)
+    values = struct.unpack(">lll", payload)
     return values
 
 # --------------------------
