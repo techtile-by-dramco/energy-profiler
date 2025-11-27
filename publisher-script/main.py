@@ -35,7 +35,7 @@ socket = context.socket(zmq.PUB)
 socket.bind("tcp://0.0.0.0:5556")  # Bind to local address and port
 
 
-ser = serial.Serial('/dev/ttyUSB1', 115200, timeout=1)  # Change 'COM1' to your serial port
+ser = serial.Serial('/dev/ttyUSB1', 460800, timeout=1)  # Change 'COM1' to your serial port
 
 def read_data():
 
