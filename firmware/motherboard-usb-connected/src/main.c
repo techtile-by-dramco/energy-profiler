@@ -50,7 +50,7 @@ int32_t pot_val;
 
 int32_t buffer_voltage_mv;
 uint32_t resistance;
-uint32_t pwr_nw;
+uint32_t pwr_pw;
 
 uint8_t counter = 0;
 
@@ -127,14 +127,14 @@ void on_timer_event(){
     // Update uint32_t array
     buf32 [0] = buffer_voltage_mv;
     buf32 [1] = resistance;
-    buf32 [2] = pwr_nw;
+    buf32 [2] = pwr_pw;
 
     // Calculate total number of elements in buf32 array
     uint8_t buf32_size = sizeof(buf32) / sizeof(buf32[0]);
 
     // Begin delimter + length
     buf8[0] = 0x02;
-    buf8[1] = buf32_size * sizeof(uint32_t) + 2;
+    buf8[1] = buf32_size * sizeof(uint32_t) + 1; // SHOULD BE + 1 (only one checksum byte)
 
     // Perform conversion
     size_t idx = 2;
@@ -245,7 +245,7 @@ int main(void)
         }
 
         //  Calculate pwr level
-        pwr_nw = buffer_voltage_mv*buffer_voltage_mv*1e6 / resistance;
+        pwr_pw = buffer_voltage_mv*buffer_voltage_mv*1e6 / resistance;
 
 
         if(buffer_voltage_mv > 2000){
@@ -259,31 +259,35 @@ int main(void)
         //  Reset performance measurements
         if(pot_val == 0) { num = 0; max_voltage = 0; }
 
-        //  First buffer_voltage check
-        if(buffer_voltage_mv > upper_set_point){
-            uint8_t error = (buffer_voltage_mv - upper_set_point)*KP;
-            if(!error){error = 1;}
-            pot_val = pot_val + error;
-            if (pot_val < UPPER_BOUNDARY) {
-                peripherals_set_digital_potentiometer(pot_val);
+        //  Check if buffer voltage is higher than zero
+        if(buffer_voltage_mv > 0){
+        
+                //  First buffer_voltage check
+            if(buffer_voltage_mv > upper_set_point){
+                uint32_t error = (buffer_voltage_mv - upper_set_point)*KP;
+                if(!error){error = 1;}
+                pot_val = pot_val + error;
+                if (pot_val < UPPER_BOUNDARY) {
+                    peripherals_set_digital_potentiometer(pot_val);
+                }
+                else{
+                    pot_val = UPPER_BOUNDARY;
+                    peripherals_set_digital_potentiometer(UPPER_BOUNDARY);
+                }
             }
-            else{
-                pot_val = UPPER_BOUNDARY;
-                peripherals_set_digital_potentiometer(UPPER_BOUNDARY);
-            }
-        }
 
-        //  Second buffer_voltage check
-        if(buffer_voltage_mv < lower_set_point){
-            uint8_t error = (lower_set_point - buffer_voltage_mv)*KP;
-            if(!error){error = 1;}
-            pot_val = pot_val - error;
-            if (pot_val > LOWER_BOUNDARY) {
-                peripherals_set_digital_potentiometer(pot_val);
-            }
-            else{
-                pot_val = LOWER_BOUNDARY;
-                peripherals_set_digital_potentiometer(LOWER_BOUNDARY);
+            //  Second buffer_voltage check
+            if(buffer_voltage_mv < lower_set_point){
+                uint32_t error = (lower_set_point - buffer_voltage_mv)*KP;
+                if(!error){error = 1;}
+                pot_val = pot_val - error;
+                if (pot_val > LOWER_BOUNDARY) {
+                    peripherals_set_digital_potentiometer(pot_val);
+                }
+                else{
+                    pot_val = LOWER_BOUNDARY;
+                    peripherals_set_digital_potentiometer(LOWER_BOUNDARY);
+                }
             }
         }
     }
@@ -338,7 +342,7 @@ int debugger(){
 
         printk("resistance: %d\n", resistance);
 
-        printk("Power: %d nW\n", pwr_nw);
+        printk("Power: %d nW\n", pwr_pw);
 
         // printk("%d\n", num);
 
