@@ -1,6 +1,6 @@
-# Energy Profiler
+# 🔍 Energy Profiler 🔍
 
-### Updates ToDo
+### Updates ToDo 📝
 - Why does it still return values or adjust the resistance when the voltage is 0V? This is likely caused by negative voltage readings – a type-casting issue from int16 to uint16 → needs to be checked.
 - The frame is incorrect and must be reviewed.
 - Change the variable name `pwr_nw` to `pwr_pw`.
