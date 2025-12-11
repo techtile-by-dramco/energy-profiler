@@ -12,3 +12,10 @@
    	sudo systemctl enable ep.service
    	sudo systemctl start ep.service
   	```   
+### Update energy profiler service
+	
+	```
+	sudo cp ~/energy-profiler/ep.service /etc/systemd/system/
+	sudo systemctl daemon-reload
+	sudo systemctl restart ep.service
+	```
