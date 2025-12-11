@@ -1,4 +1,6 @@
-### Test Ebergy Profiler script
+# Energy Profiler
+
+### Test Energy Profiler script
 1. Test `/publisher-script/main_last.py`
 2. Run services
 	1. Copy service files to systemd:
