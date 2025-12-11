@@ -3,7 +3,7 @@ Description=Local Dashboard Service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/pi/energy-profiler/publisher-script/main.py
+ExecStart=/usr/bin/python3 /home/pi/energy-profiler/publisher-script/main_last.py
 WorkingDirectory=/home/pi/energy-profiler/publisher-script/
 Restart=always
 RestartSec=30
