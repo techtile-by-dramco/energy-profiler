@@ -25,7 +25,7 @@ try:
                 f"{data['timestamp']} s | "
                 f"{data['buffer_voltage_mv']} mV | "
                 f"{data['resistance']} Ω | "
-                f"{data['pwr_nw']} pW"
+                f"{data['pwr_pw']} pW"
             )
 
         except zmq.error.Again:
