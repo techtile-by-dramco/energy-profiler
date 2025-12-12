@@ -122,10 +122,16 @@ while True:
             "pwr_nw": readings[2]
         }
 
-    # Only transmit every 1 second
-    if latest_data and (time.time() - last_send_time) >= 1.0:
+    # # Only transmit every 1 second
+    # if latest_data and (time.time() - last_send_time) >= 1.0:
+    #     socket.send_string(json.dumps(latest_data))
+    #     print(f"{latest_data['timestamp']} - {latest_data['buffer_voltage_mv']} - "
+    #           f"{latest_data['resistance']} - {latest_data['pwr_nw']}")
+    #     last_send_time = time.time()
+
+    # Only transmit every 100 ms
+    if latest_data and (time.time() - last_send_time) >= 0.1:
         socket.send_string(json.dumps(latest_data))
         print(f"{latest_data['timestamp']} - {latest_data['buffer_voltage_mv']} - "
               f"{latest_data['resistance']} - {latest_data['pwr_nw']}")
         last_send_time = time.time()
-
