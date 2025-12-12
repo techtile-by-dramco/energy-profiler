@@ -134,7 +134,7 @@ void on_timer_event(){
 
     // Begin delimter + length
     buf8[0] = 0x02;
-    buf8[1] = buf32_size * sizeof(uint32_t) + 1; // SHOULD BE + 1 (only one checksum byte)
+    buf8[1] = buf32_size * sizeof(uint32_t) + 1;
 
     // Perform conversion
     size_t idx = 2;
@@ -229,7 +229,13 @@ int main(void)
         k_usleep(500); // UPDATE --> DIT WEG
 
         // peripherals_ads1115_read_one_channel(0);
-        buffer_voltage_mv = peripherals_ads1115_read(ADS1115_COMP_0_GND);
+        // buffer_voltage_mv = peripherals_ads1115_read(ADS1115_COMP_0_GND);
+
+        int32_t voltage = peripherals_ads1115_read(ADS1115_COMP_0_GND);
+
+        if (voltage > 0) {
+            buffer_voltage_mv = voltage;
+        }
 
         // k_usleep(5000);
 
@@ -259,35 +265,31 @@ int main(void)
         //  Reset performance measurements
         if(pot_val == 0) { num = 0; max_voltage = 0; }
 
-        //  Check if buffer voltage is higher than zero
-        if(buffer_voltage_mv > 0){
-        
-                //  First buffer_voltage check
-            if(buffer_voltage_mv > upper_set_point){
-                uint32_t error = (buffer_voltage_mv - upper_set_point)*KP;
-                if(!error){error = 1;}
-                pot_val = pot_val + error;
-                if (pot_val < UPPER_BOUNDARY) {
-                    peripherals_set_digital_potentiometer(pot_val);
-                }
-                else{
-                    pot_val = UPPER_BOUNDARY;
-                    peripherals_set_digital_potentiometer(UPPER_BOUNDARY);
-                }
+        //  First buffer_voltage check
+        if(buffer_voltage_mv > upper_set_point){
+            uint8_t error = (buffer_voltage_mv - upper_set_point)*KP;
+            if(!error){error = 1;}
+            pot_val = pot_val + error;
+            if (pot_val < UPPER_BOUNDARY) {
+                peripherals_set_digital_potentiometer(pot_val);
             }
+            else{
+                pot_val = UPPER_BOUNDARY;
+                peripherals_set_digital_potentiometer(UPPER_BOUNDARY);
+            }
+        }
 
-            //  Second buffer_voltage check
-            if(buffer_voltage_mv < lower_set_point){
-                uint32_t error = (lower_set_point - buffer_voltage_mv)*KP;
-                if(!error){error = 1;}
-                pot_val = pot_val - error;
-                if (pot_val > LOWER_BOUNDARY) {
-                    peripherals_set_digital_potentiometer(pot_val);
-                }
-                else{
-                    pot_val = LOWER_BOUNDARY;
-                    peripherals_set_digital_potentiometer(LOWER_BOUNDARY);
-                }
+        //  Second buffer_voltage check
+        if(buffer_voltage_mv < lower_set_point){
+            uint8_t error = (lower_set_point - buffer_voltage_mv)*KP;
+            if(!error){error = 1;}
+            pot_val = pot_val - error;
+            if (pot_val > LOWER_BOUNDARY) {
+                peripherals_set_digital_potentiometer(pot_val);
+            }
+            else{
+                pot_val = LOWER_BOUNDARY;
+                peripherals_set_digital_potentiometer(LOWER_BOUNDARY);
             }
         }
     }
@@ -370,7 +372,7 @@ int debugger(){
         curr_time = k_uptime_get();
 
         //  Blink LED
-        if(curr_time - prev_time > 100){
+        if(curr_time - prev_time > 50){
             prev_time = curr_time;
             if(state)   {   gpio_pin_set_dt(&blue_led_pin, 1);  state = 0;  }
             else        {   gpio_pin_set_dt(&blue_led_pin, 0);  state = 1;  }
