@@ -1,6 +1,10 @@
 # 🔍 Energy Profiler 🔍
 
-This repository contains the **hardware** files (including the controller board), the **firmware** running on the controller board, the **publisher script** (which receives information from the controller board over a USB connection), and an example **subscriber script**.
+This repository contains 
+- the **hardware** files (including the controller board)
+- the **firmware** running on the controller board
+- the **publisher script** (which receives information from the controller board over a USB connection)
+- an example **subscriber script**
 
 ### Updates ToDo 📝
 - Why does it still return values or adjust the resistance when the voltage is 0V? This is likely caused by negative voltage readings – a type-casting issue from int16 to uint16 → needs to be checked.
