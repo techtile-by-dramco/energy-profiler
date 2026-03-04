@@ -1,3 +1,5 @@
+from asyncio.windows_events import NULL
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
@@ -22,10 +24,11 @@ df = df[0:680]
 
 print(df["js_power_pw"]-df["pwr_pw"])
 
-js_voltage = None
-
-# js_voltage = "_function_of_js_voltage"
-# df["pwr_pw"] = (df["js_voltage_mv"]*1e3) ** 2 / df["resistance"]
+# -- P1 --> power EP calculated via energy profiler
+js_voltage = "P1"
+# -- P2 --> due to energy loss over the joulescope shunt resistor EP power is calculated via JouleScope voltage
+js_voltage = "P2"
+df["pwr_pw"] = (df["js_voltage_mv"]*1e3) ** 2 / df["resistance"]
 
 
 plt.figure()
@@ -37,7 +40,7 @@ plt.ylabel("EP Power [uW]")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_ep{js_voltage}.png")
+  plt.savefig(f"{current_dir}/js_vs_ep_{js_voltage}.png")
 plt.show()
 
 # Plot both power columns
@@ -49,7 +52,7 @@ plt.ylabel("Delta [uW]")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_ep_delta{js_voltage}.png")
+  plt.savefig(f"{current_dir}/js_vs_ep_delta_{js_voltage}.png")
 plt.show()
 
 # Plot both power columns
@@ -61,7 +64,7 @@ plt.ylabel("Error [%]")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_ep_error{js_voltage}.png")
+  plt.savefig(f"{current_dir}/js_vs_ep_error_{js_voltage}.png")
 plt.show()
 
 # Plot both power columns
@@ -74,7 +77,7 @@ plt.xscale("log")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_ep_error_log{js_voltage}.png")
+  plt.savefig(f"{current_dir}/js_vs_ep_error_log_{js_voltage}.png")
 plt.show()
 
 
@@ -87,5 +90,5 @@ plt.ylabel("Delta [uW]")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_pot_val{js_voltage}.png")
+  plt.savefig(f"{current_dir}/js_vs_pot_val_{js_voltage}.png")
 plt.show()
