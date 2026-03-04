@@ -8,18 +8,24 @@ current_dir = os.path.dirname(current_file_path)
 parent_path = os.path.dirname(current_dir)
 filename = os.path.basename(current_dir)
 
-path = f"{current_dir}/1769440189_measurements.csv"
+path = f"{current_dir}/1772621117_measurements.csv"
 
-SAVE = False
+SAVE = True
+
 
 print(path)
 
 # Load CSV
 df = pd.read_csv(path)
 
-# df = df[0:460]
+df = df[0:680]
 
 print(df["js_power_pw"]-df["pwr_pw"])
+
+js_voltage = None
+
+# js_voltage = "_function_of_js_voltage"
+# df["pwr_pw"] = (df["js_voltage_mv"]*1e3) ** 2 / df["resistance"]
 
 
 plt.figure()
@@ -31,7 +37,7 @@ plt.ylabel("EP Power [uW]")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_ep.png")
+  plt.savefig(f"{current_dir}/js_vs_ep{js_voltage}.png")
 plt.show()
 
 # Plot both power columns
@@ -43,7 +49,7 @@ plt.ylabel("Delta [uW]")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_ep_delta.png")
+  plt.savefig(f"{current_dir}/js_vs_ep_delta{js_voltage}.png")
 plt.show()
 
 # Plot both power columns
@@ -55,5 +61,31 @@ plt.ylabel("Error [%]")
 plt.legend()
 plt.grid(True)
 if SAVE:
-  plt.savefig(f"{current_dir}/js_vs_ep_error.png")
+  plt.savefig(f"{current_dir}/js_vs_ep_error{js_voltage}.png")
+plt.show()
+
+# Plot both power columns
+plt.figure()
+plt.plot(df["js_power_pw"]/1e6, (df["js_power_pw"]-df["pwr_pw"])/df["js_power_pw"]*100)#, label="Joulescope Power (pW)")
+plt.xlabel("JS Power [uW]")
+plt.ylabel("Error [%]")
+# plt.title("Power Comparison")
+plt.xscale("log")
+plt.legend()
+plt.grid(True)
+if SAVE:
+  plt.savefig(f"{current_dir}/js_vs_ep_error_log{js_voltage}.png")
+plt.show()
+
+
+# Plot both power columns
+plt.figure()
+plt.plot(df["pot_val"], (df["js_power_pw"]-df["pwr_pw"])/1e6)#, label="Joulescope Power (pW)")
+plt.xlabel("pot_val")
+plt.ylabel("Delta [uW]")
+# plt.title("Power Comparison")
+plt.legend()
+plt.grid(True)
+if SAVE:
+  plt.savefig(f"{current_dir}/js_vs_pot_val{js_voltage}.png")
 plt.show()

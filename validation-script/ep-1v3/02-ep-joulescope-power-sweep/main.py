@@ -13,17 +13,18 @@ filename = os.path.basename(current_dir)
 
 file_path = f"{current_dir}\{round(time.time())}_measurements.csv"
 
-NUM_MEASUREMENTS = 486
-STEPS = 1
+# NUM_MEASUREMENTS = 651
+START = 0
+STOP = 701
+STEPS = 50
 
 def get_data(i):
 
     ep_change_resistance(i)
 
-    time.sleep(1)
+    time.sleep(3)
 
     ep_data = get_ep_data()
-
 
     data = js.read(contiguous_duration=0.1)
     current, voltage = np.mean(data, axis=0, dtype=np.float64)
@@ -45,7 +46,7 @@ with joulescope.scan_require_one(config='auto') as js, open(file_path, mode='a',
 
     writer = None
 
-    for i in range(0, NUM_MEASUREMENTS, STEPS):
+    for i in range(START, STOP, STEPS):
         data = get_data(i)
 
         # Create writer only once, using real data keys
