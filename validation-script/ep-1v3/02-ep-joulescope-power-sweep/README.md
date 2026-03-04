@@ -4,6 +4,8 @@ Votage of the power supply was 2V in following measurement.
 Power supply was connected to the joulescope and the energy profiler.
 The current passes through the JouleScope.
 
+"Joulescope switches shunt resistors in approximately 1 μs on over-range to keep your target device running correctly. It maintains a maximum burden voltage of 20 mV across the shunt resistor, for any current up to 2 A. Joulescope is electrically isolated to avoid any grounding and ground loop concerns." [See here](https://www.joulescope.com/blogs/blog/how-to-measure-current).
+
 ### Processing 1: Results
 
 Power consumed in the EP calculated via energy profiler itself.
