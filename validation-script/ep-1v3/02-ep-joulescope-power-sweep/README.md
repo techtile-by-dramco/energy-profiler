@@ -1,5 +1,9 @@
 ## JouleScope Measuements
 
+Votage of the power supply was 2V in following measurement.
+Power supply was connected to the joulescope and the energy profiler.
+The current passes through the JouleScope.
+
 ### Processing 1: Results
 
 Power consumed in the EP calculated via energy profiler itself.
