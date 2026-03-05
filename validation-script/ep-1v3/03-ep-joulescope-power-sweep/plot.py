@@ -29,8 +29,6 @@ plt.plot(df["js_power_pw"]/1e6,df["pwr_pw"]/1e6)#, label="Joulescope Power (pW)"
 # plt.plot(df["pwr_pw"], label="Calculated Power (pW)")
 plt.xlabel("JS Power [uW]")
 plt.ylabel("EP Power [uW]")
-# plt.title("Power Comparison")
-
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep.png")
@@ -41,8 +39,6 @@ plt.figure()
 plt.plot(df["js_power_pw"]/1e6, (df["js_power_pw"]-df["pwr_pw"])/1e6)#, label="Joulescope Power (pW)")
 plt.xlabel("JS Power [uW]")
 plt.ylabel("Delta [uW]")
-# plt.title("Power Comparison")
-
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep_delta.png")
@@ -53,8 +49,6 @@ plt.figure()
 plt.plot(df["js_power_pw"]/1e6, (df["js_power_pw"]-df["pwr_pw"])/df["js_power_pw"]*100)#, label="Joulescope Power (pW)")
 plt.xlabel("JS Power [uW]")
 plt.ylabel("Error [%]")
-# plt.title("Power Comparison")
-
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep_error.png")
@@ -65,9 +59,7 @@ plt.figure()
 plt.plot(df["js_power_pw"]/1e6, (df["js_power_pw"]-df["pwr_pw"])/df["js_power_pw"]*100)#, label="Joulescope Power (pW)")
 plt.xlabel("JS Power [uW]")
 plt.ylabel("Error [%]")
-# plt.title("Power Comparison")
 plt.xscale("log")
-
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep_error_log.png")
@@ -79,8 +71,6 @@ plt.figure()
 plt.plot(df["pot_val"], (df["js_power_pw"]-df["pwr_pw"])/1e6)#, label="Joulescope Power (pW)")
 plt.xlabel("pot_val")
 plt.ylabel("Delta [uW]")
-# plt.title("Power Comparison")
-
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_pot_val.png")
