@@ -3,6 +3,7 @@ from asyncio.windows_events import NULL
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import matplot2tikz as tkz
 
 # Path to save the experiment data as a YAML file
 current_file_path = os.path.abspath(__file__)
@@ -12,8 +13,9 @@ filename = os.path.basename(current_dir)
 
 path = f"{current_dir}/1772621117_measurements.csv"
 
-SAVE = True
-
+SAVE = False
+PLOT = False
+TIKZ = True
 
 print(path)
 
@@ -41,7 +43,10 @@ plt.legend()
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep_{js_voltage}.png")
-plt.show()
+if PLOT:
+  plt.show()
+if TIKZ:
+  tkz.save(f"{current_dir}/js_vs_ep_{js_voltage}.tex")
 
 # Plot both power columns
 plt.figure()
@@ -53,7 +58,10 @@ plt.legend()
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep_delta_{js_voltage}.png")
-plt.show()
+if PLOT:
+  plt.show()
+if TIKZ:
+  tkz.save(f"{current_dir}/js_vs_ep_delta_{js_voltage}.tex")
 
 # Plot both power columns
 plt.figure()
@@ -65,7 +73,10 @@ plt.legend()
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep_error_{js_voltage}.png")
-plt.show()
+if PLOT:
+  plt.show()
+if TIKZ:
+  tkz.save(f"{current_dir}/js_vs_ep_error_{js_voltage}.tex")
 
 # Plot both power columns
 plt.figure()
@@ -78,8 +89,10 @@ plt.legend()
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_ep_error_log_{js_voltage}.png")
-plt.show()
-
+if PLOT:
+  plt.show()
+if TIKZ:
+  tkz.save(f"{current_dir}/js_vs_ep_error_log_{js_voltage}.tex")
 
 # Plot both power columns
 plt.figure()
@@ -91,4 +104,7 @@ plt.legend()
 plt.grid(True)
 if SAVE:
   plt.savefig(f"{current_dir}/js_vs_pot_val_{js_voltage}.png")
-plt.show()
+if PLOT:
+  plt.show()
+if TIKZ:
+  tkz.save(f"{current_dir}/js_vs_pot_val_{js_voltage}.tex")

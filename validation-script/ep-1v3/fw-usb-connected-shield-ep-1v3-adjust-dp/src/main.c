@@ -29,7 +29,7 @@
 #include <zephyr/drivers/uart.h>
 
 #define CALIBRATION
-// #define AUTO_RESISTANCE_TUNE
+#define AUTO_RESISTANCE_TUNE
 #define BROADCAST_DATA
 
 //  Default setpoint and accuracy
@@ -266,15 +266,15 @@ int main(void)
 
                 value = (int32_t)value;
 
-                //  Limit potentiometer value to upper boundary
-                if(value > UPPER_BOUNDARY){
-                    value = UPPER_BOUNDARY;
-                }
-
                 //  Check command and execute corresponding action
                 switch (cmd)
                 {
                 case 1:
+                    //  Limit potentiometer value to upper boundary
+                    if(value > UPPER_BOUNDARY){
+                        value = UPPER_BOUNDARY;
+                    }
+
                     pot_val = value;
                     peripherals_set_digital_potentiometer(value);
                     break;
