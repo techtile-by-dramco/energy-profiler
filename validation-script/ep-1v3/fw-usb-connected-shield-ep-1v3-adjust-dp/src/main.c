@@ -290,13 +290,13 @@ int main(void)
                 default:
                     break;
                 }
-
-
-                uart_rx_enable(uart, rx_buf, sizeof(rx_buf), 10000);
                 
             } else {
                 printk("Invalid frame\n");
             }
+
+            // RX altijd opnieuw starten
+            uart_rx_enable(uart, rx_buf, sizeof(rx_buf), 10000);
 
             new_uart_message = false;
         }
