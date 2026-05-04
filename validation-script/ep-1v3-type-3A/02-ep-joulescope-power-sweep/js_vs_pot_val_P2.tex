@@ -1,0 +1,43 @@
+% This file was created with matplot2tikz v0.5.4.
+\begin{tikzpicture}
+
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{lightgray204}{RGB}{204,204,204}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+legend style={fill opacity=0.8, draw opacity=1, text opacity=1, draw=lightgray204},
+tick align=outside,
+tick pos=left,
+x grid style={darkgray176},
+xlabel={pot\_val},
+xmajorgrids,
+xmin=-35, xmax=735,
+xtick style={color=black},
+y grid style={darkgray176},
+ylabel={Delta [uW]},
+ymajorgrids,
+ymin=-70.1543704877304, ymax=4.12483284258161,
+ytick style={color=black}
+]
+\addplot [semithick, steelblue31119180, forget plot]
+table {%
+0 0.108519700373644
+50 0.162079146779064
+100 0.235530076043274
+150 0.377918956282966
+200 0.748505418476522
+250 0.088198593324624
+300 0.113213541429296
+350 0.0621449835422784
+400 -0.00899385581643879
+450 -1.16025192665005
+500 -1.38446079223853
+550 -2.40871300274432
+600 -5.0686147525773
+650 -14.2197744104803
+700 -66.7780430636253
+};
+\end{axis}
+
+\end{tikzpicture}

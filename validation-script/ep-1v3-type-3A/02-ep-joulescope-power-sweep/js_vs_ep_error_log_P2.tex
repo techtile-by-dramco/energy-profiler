@@ -1,0 +1,45 @@
+% This file was created with matplot2tikz v0.5.4.
+\begin{tikzpicture}
+
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{lightgray204}{RGB}{204,204,204}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+legend style={fill opacity=0.8, draw opacity=1, text opacity=1, draw=lightgray204},
+log basis x={10},
+tick align=outside,
+tick pos=left,
+x grid style={darkgray176},
+xlabel={JS Power [uW]},
+xmajorgrids,
+xmin=3.01686284612116, xmax=6750.82152275626,
+xmode=log,
+xtick style={color=black},
+y grid style={darkgray176},
+ylabel={Error [\%]},
+ymajorgrids,
+ymin=-1.67627596174634, ymax=4.30144318248175,
+ytick style={color=black}
+]
+\addplot [semithick, steelblue31119180, forget plot]
+table {%
+4.283702 2.53331581827223
+5.257069 3.08307056230504
+6.857045 3.43486262731649
+9.957532 3.79530747461284
+18.574586 4.02972867592592
+46.487507 0.189725367128472
+57.977337 0.195272061959824
+77.637837 0.0800447126602438
+119.504621 -0.00752594815261478
+269.588484 -0.430378890609455
+473.771242 -0.292221365398648
+609.882185 -0.394947263912016
+857.477777 -0.591107418586465
+1447.21254 -0.982562962761521
+4754.369616 -1.40456145519052
+};
+\end{axis}
+
+\end{tikzpicture}

@@ -1,0 +1,9 @@
+{
+	"folders": [],
+	"settings": {
+		"files.associations": {
+			"advertisement.h": "c"
+		},
+		"nrf-connect.applications": []
+	}
+}
